@@ -288,3 +288,32 @@
       }
       document.getElementById("thermodynamicsInputs").innerHTML = inputsHtml;
     }
+    function showMechanicsInputs() {
+      const problemType = document.getElementById("mechanicsProblemSelect").value;
+      let inputsHtml = "";
+      if (problemType === "kinematic") {
+        inputsHtml += '<label>Initial Velocity (u)</label><input type="number" id="u_kin" placeholder="in m/s">';
+        inputsHtml += '<label>Acceleration (a)</label><input type="number" id="a_kin" placeholder="in m/s²">';
+        inputsHtml += '<label>Time (t)</label><input type="number" id="t_kin" placeholder="in seconds">';
+      } else if (problemType === "workenergy") {
+        inputsHtml += '<label>Force (F)</label><input type="number" id="F_we" placeholder="in N">';
+        inputsHtml += '<label>Distance (d)</label><input type="number" id="d_we" placeholder="in meters">';
+      } else if (problemType === "newton2") {
+        inputsHtml += '<label>Mass (m)</label><input type="number" id="m_n2" placeholder="in kg">';
+        inputsHtml += '<label>Acceleration (a)</label><input type="number" id="a_n2" placeholder="in m/s²">';
+      } else if (problemType === "energy") {
+        inputsHtml += '<label>Mass (m)</label><input type="number" id="m_ke" placeholder="in kg">';
+        inputsHtml += '<label>Velocity (v)</label><input type="number" id="v_ke" placeholder="in m/s">';
+      } else if (problemType === "potential") {
+        inputsHtml += '<label>Mass (m)</label><input type="number" id="m_pe" placeholder="in kg">';
+        inputsHtml += '<label>Height (h)</label><input type="number" id="h_pe" placeholder="in meters">';
+      }
+      document.getElementById("mechanicsInputs").innerHTML = inputsHtml;
+    }
+
+    // Main solver function
+    async function solveProblem() {
+      const problemDescription = document.getElementById("problemDescription").value.trim();
+      const problemImage = document.getElementById("problemImage").files[0];
+      let stepsText = "";
+      let resultText = "";
