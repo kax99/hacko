@@ -341,3 +341,40 @@
           } else {
             resultText = "Provide Tₐ, T₀, k, and t.";
           }
+        } else if (problemType === "idealgas") {
+          let P = parseFloat(document.getElementById("P").value);
+          let V = parseFloat(document.getElementById("V_gas").value);
+          let n = parseFloat(document.getElementById("n").value);
+          const R = 8.314; // J/mol·K
+          if (!isNaN(P) && !isNaN(V) && !isNaN(n)) {
+            let T = (P * V) / (n * R);
+            stepsText = `<div class="step">Using PV = nRT</div><div class="step">T = PV / (nR)</div>`;
+            resultText = `Temperature (T) = ${T.toFixed(2)} K`;
+          } else {
+            resultText = "Provide P, V, and n.";
+          }
+        } else if (problemType === "specificheat") {
+          let m = parseFloat(document.getElementById("m_sh").value);
+          let c = parseFloat(document.getElementById("c").value);
+          let deltaT = parseFloat(document.getElementById("deltaT").value);
+          if (!isNaN(m) && !isNaN(c) && !isNaN(deltaT)) {
+            let Q = m * c * deltaT;
+            stepsText = `<div class="step">Using Q = mcΔT</div>`;
+            resultText = `Heat (Q) = ${Q.toFixed(2)} J`;
+          } else {
+            resultText = "Provide m, c, and ΔT.";
+          }
+        } else if (problemType === "conduction") {
+          let k = parseFloat(document.getElementById("k_cond").value);
+          let A = parseFloat(document.getElementById("A").value);
+          let deltaT = parseFloat(document.getElementById("deltaT_cond").value);
+          let t = parseFloat(document.getElementById("t_cond").value);
+          let d = parseFloat(document.getElementById("d").value);
+          if (!isNaN(k) && !isNaN(A) && !isNaN(deltaT) && !isNaN(t) && !isNaN(d)) {
+            let Q = (k * A * deltaT * t) / d;
+            stepsText = `<div class="step">Using Q = (kAΔTt)/d</div>`;
+            resultText = `Heat (Q) = ${Q.toFixed(2)} J`;
+          } else {
+            resultText = "Provide k, A, ΔT, t, and d.";
+          }
+        }
