@@ -1,0 +1,89 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Physics Problem Solver</h1>
+
+        <div class="section">
+            <h2>Select Chapter</h2>
+            <select id="chapterSelect" onchange="showChapterOptions()">
+                <option value="" disabled selected>Select a chapter</option>
+                <option value="optics">Light (Optics)</option>
+                <option value="electricity">Electricity</option>
+                <option value="thermodynamics">Thermodynamics</option>
+                <option value="mechanics">Mechanics</option>
+            </select>
+        </div>
+
+        <div id="opticsOptions" class="section" style="display:none;">
+            <h2>Choose Optics Problem</h2>
+            <select id="opticsProblemSelect" onchange="showOpticsInputs()">
+                <option value="" disabled selected>Select an optics problem</option>
+                <option value="lens">Lens Formula</option>
+                <option value="mirror">Mirror Formula</option>
+                <option value="snell">Snell's Law</option>
+            </select>
+            <div id="opticsInputs"></div>
+        </div>
+
+        <div id="electricityOptions" class="section" style="display:none;">
+            <h2>Choose Electricity Problem</h2>
+            <select id="electricityProblemSelect" onchange="showElectricityInputs()">
+                <option value="" disabled selected>Select an electricity problem</option>
+                <option value="ohm">Ohm's Law</option>
+            </select>
+            <div id="electricityInputs"></div>
+        </div>
+            
+        <div id="thermodynamicsOptions" class="section" style="display:none;">
+            <h2>Thermodynamics Problem</h2>
+            <select id="thermodynamicsProblemSelect" onchange="showThermodynamicsInputs()">
+              <option value="" disabled selected>Select a problem</option>
+              <option value="newton">Newton's Law of Cooling (T(t) = Tₐ + (T₀ - Tₐ)e^(-kt))</option>
+              <option value="idealgas">Ideal Gas Law (PV = nRT)</option>
+              <option value="specificheat">Specific Heat (Q = mcΔT)</option>
+              <option value="conduction">Heat Conduction (Q = kAΔTt/d)</option>
+            </select>
+            <div id="thermodynamicsInputs"></div>
+          </div>
+      
+          <!-- Mechanics Options -->
+          <div id="mechanicsOptions" class="section" style="display:none;">
+            <h2>Mechanics Problem</h2>
+            <select id="mechanicsProblemSelect" onchange="showMechanicsInputs()">
+              <option value="" disabled selected>Select a problem</option>
+              <option value="kinematic">Kinematic Equation (v = u + at)</option>
+              <option value="workenergy">Work-Energy (W = Fd)</option>
+              <option value="newton2">Newton's Second Law (F = ma)</option>
+              <option value="energy">Kinetic Energy (KE = ½mv²)</option>
+              <option value="potential">Potential Energy (U = mgh)</option>
+            </select>
+            <div id="mechanicsInputs"></div>
+          </div>
+      
+          <!-- AI Input Section -->
+          <div id="aiInputSection" class="section">
+            <h2>Custom Problem (AI-Powered)</h2>
+            <p>If your problem isn't listed, describe it or upload an image below.</p>
+            <label for="problemDescription">Problem Description</label>
+            <textarea id="problemDescription" placeholder="e.g., A 2 kg object accelerates at 3 m/s². Find the force."></textarea>
+            <label for="problemImage">Upload Problem Image</label>
+            <input type="file" id="problemImage" accept="image/*">
+          </div>
+      
+          <!-- Solve Button -->
+          <button onclick="solveProblem()">Solve Problem</button>
+      
+          <!-- Output Sections -->
+          <div id="steps" class="step-container" style="display:none;"></div>
+          <div id="result" class="result" style="display:none;"></div>
+        </div>
+        
+    
+</body>
+</html>
