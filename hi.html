@@ -5,7 +5,128 @@
     <title>Document</title>
 </head>
 
+
 <body>
+    <style>
+        body {
+          font-family: 'Segoe UI', Arial, sans-serif;
+          background-color: #f0f4f8;
+          margin: 0;
+          padding: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+        }
+        .container {
+          background-color: #ffffff;
+          padding: 30px;
+          border-radius: 12px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+          max-width: 700px;
+          width: 100%;
+          border: 1px solid #e0e6ed;
+        }
+        h1 {
+          text-align: center;
+          color: #2c3e50;
+          margin-bottom: 30px;
+          font-size: 28px;
+        }
+        .section {
+          margin-bottom: 25px;
+          padding: 20px;
+          background-color: #fafafa;
+          border-radius: 8px;
+          border: 1px solid #e0e6ed;
+          transition: all 0.3s ease;
+        }
+        .section:hover {
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        #aiInputSection {
+          background-color: #f1faff;
+          border: 1px solid #b3d4fc;
+        }
+        h2 {
+          font-size: 20px;
+          color: #34495e;
+          margin-bottom: 15px;
+        }
+        select, input, textarea {
+          width: 100%;
+          padding: 12px;
+          margin-bottom: 15px;
+          border: 1px solid #ccd1d9;
+          border-radius: 6px;
+          box-sizing: border-box;
+          font-size: 16px;
+          transition: border-color 0.3s ease;
+        }
+        select:focus, input:focus, textarea:focus {
+          border-color: #3498db;
+          outline: none;
+        }
+        textarea {
+          min-height: 120px;
+          resize: vertical;
+        }
+        input[type="file"] {
+          padding: 5px 0;
+        }
+        label {
+          display: block;
+          margin-bottom: 5px;
+          color: #7f8c8d;
+          font-size: 14px;
+        }
+        button {
+          width: 100%;
+          padding: 14px;
+          background-color: #3498db;
+          color: #ffffff;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 18px;
+          font-weight: bold;
+          transition: background-color 0.3s ease;
+        }
+        button:hover {
+          background-color: #2980b9;
+        }
+        .step-container {
+          margin-top: 20px;
+          padding: 15px;
+          background-color: #f9fbfd;
+          border-left: 4px solid #3498db;
+          border-radius: 6px;
+          font-family: 'Courier New', monospace;
+          color: #2c3e50;
+          line-height: 1.6;
+        }
+        .step {
+          margin-bottom: 10px;
+        }
+        .step-title {
+          font-weight: bold;
+          color: #3498db;
+        }
+        .result {
+          margin-top: 20px;
+          padding: 15px;
+          background-color: #e8f8f5;
+          border-left: 4px solid #1abc9c;
+          border-radius: 6px;
+          font-weight: bold;
+          color: #186a3b;
+        }
+        .error {
+          background-color: #fce4e4;
+          border-left: 4px solid #e74c3c;
+          color: #c0392b;
+        }
+      </style>
     <div class="container">
         <h1>Physics Problem Solver</h1>
 
@@ -83,7 +204,87 @@
           <div id="steps" class="step-container" style="display:none;"></div>
           <div id="result" class="result" style="display:none;"></div>
         </div>
+        <script>
+            
+            const API_KEY = 'AIzaSyC6c67uTYOsefWSDf5Q7ZMY4CNDRSECpCM';
+        
+            // Show chapter-specific options
+            function showChapterOptions() {
+              const chapter = document.getElementById("chapterSelect").value;
+              document.getElementById("opticsOptions").style.display = chapter === "optics" ? "block" : "none";
+              document.getElementById("electricityOptions").style.display = chapter === "electricity" ? "block" : "none";
+              document.getElementById("thermodynamicsOptions").style.display = chapter === "thermodynamics" ? "block" : "none";
+              document.getElementById("mechanicsOptions").style.display = chapter === "mechanics" ? "block" : "none";
+              document.getElementById("steps").style.display = "none";
+              document.getElementById("result").style.display = "none";
         
     
-</body>
-</html>
+            }
+            function showOpticsInputs() {
+      const problemType = document.getElementById("opticsProblemSelect").value;
+      let inputsHtml = "";
+      if (problemType === "lens" || problemType === "mirror") {
+        inputsHtml += '<label>Object Distance (u)</label><input type="number" id="u" placeholder="in meters">';
+        inputsHtml += '<label>Image Distance (v)</label><input type="number" id="v" placeholder="in meters">';
+        inputsHtml += '<label>Focal Length (f)</label><input type="number" id="f" placeholder="in meters">';
+      } else if (problemType === "snell") {
+        inputsHtml += '<label>n₁</label><input type="number" id="n1" placeholder="Refractive index 1">';
+        inputsHtml += '<label>θ₁ (degrees)</label><input type="number" id="theta1" placeholder="Angle of incidence">';
+        inputsHtml += '<label>n₂</label><input type="number" id="n2" placeholder="Refractive index 2">';
+        inputsHtml += '<label>θ₂ (degrees)</label><input type="number" id="theta2" placeholder="Angle of refraction">';
+      } else if (problemType === "magnification") {
+        inputsHtml += '<label>Image Distance (v)</label><input type="number" id="v_mag" placeholder="in meters">';
+        inputsHtml += '<label>Object Distance (u)</label><input type="number" id="u_mag" placeholder="in meters">';
+      } else if (problemType === "lensmaker") {
+        inputsHtml += '<label>Refractive Index (n)</label><input type="number" id="n_lens" placeholder="e.g., 1.5">';
+        inputsHtml += '<label>R₁</label><input type="number" id="R1" placeholder="in meters">';
+        inputsHtml += '<label>R₂</label><input type="number" id="R2" placeholder="in meters">';
+      }
+      document.getElementById("opticsInputs").innerHTML = inputsHtml;
+    }
+
+    function showElectricityInputs() {
+      const problemType = document.getElementById("electricityProblemSelect").value;
+      let inputsHtml = "";
+      if (problemType === "ohm") {
+        inputsHtml += '<label>Voltage (V)</label><input type="number" id="V" placeholder="in volts">';
+        inputsHtml += '<label>Current (I)</label><input type="number" id="I" placeholder="in amperes">';
+        inputsHtml += '<label>Resistance (R)</label><input type="number" id="R" placeholder="in ohms">';
+      } else if (problemType === "power") {
+        inputsHtml += '<label>Voltage (V)</label><input type="number" id="V_pow" placeholder="in volts">';
+        inputsHtml += '<label>Current (I)</label><input type="number" id="I_pow" placeholder="in amperes">';
+      } else if (problemType === "series") {
+        inputsHtml += '<label>R₁</label><input type="number" id="R1_ser" placeholder="in ohms">';
+        inputsHtml += '<label>R₂</label><input type="number" id="R2_ser" placeholder="in ohms">';
+      } else if (problemType === "parallel") {
+        inputsHtml += '<label>R₁</label><input type="number" id="R1_par" placeholder="in ohms">';
+        inputsHtml += '<label>R₂</label><input type="number" id="R2_par" placeholder="in ohms">';
+      }
+      document.getElementById("electricityInputs").innerHTML = inputsHtml;
+    }
+
+    function showThermodynamicsInputs() {
+      const problemType = document.getElementById("thermodynamicsProblemSelect").value;
+      let inputsHtml = "";
+      if (problemType === "newton") {
+        inputsHtml += '<label>Ambient Temp (Tₐ)</label><input type="number" id="T_ambient" placeholder="in °C">';
+        inputsHtml += '<label>Initial Temp (T₀)</label><input type="number" id="T0" placeholder="in °C">';
+        inputsHtml += '<label>Cooling Constant (k)</label><input type="number" id="k" placeholder="in s⁻¹">';
+        inputsHtml += '<label>Time (t)</label><input type="number" id="time" placeholder="in seconds">';
+      } else if (problemType === "idealgas") {
+        inputsHtml += '<label>Pressure (P)</label><input type="number" id="P" placeholder="in Pa">';
+        inputsHtml += '<label>Volume (V)</label><input type="number" id="V_gas" placeholder="in m³">';
+        inputsHtml += '<label>Moles (n)</label><input type="number" id="n" placeholder="in mol">';
+      } else if (problemType === "specificheat") {
+        inputsHtml += '<label>Mass (m)</label><input type="number" id="m_sh" placeholder="in kg">';
+        inputsHtml += '<label>Specific Heat (c)</label><input type="number" id="c" placeholder="in J/kg°C">';
+        inputsHtml += '<label>ΔT</label><input type="number" id="deltaT" placeholder="in °C">';
+      } else if (problemType === "conduction") {
+        inputsHtml += '<label>Thermal Conductivity (k)</label><input type="number" id="k_cond" placeholder="in W/m°C">';
+        inputsHtml += '<label>Area (A)</label><input type="number" id="A" placeholder="in m²">';
+        inputsHtml += '<label>ΔT</label><input type="number" id="deltaT_cond" placeholder="in °C">';
+        inputsHtml += '<label>Time (t)</label><input type="number" id="t_cond" placeholder="in seconds">';
+        inputsHtml += '<label>Thickness (d)</label><input type="number" id="d" placeholder="in meters">';
+      }
+      document.getElementById("thermodynamicsInputs").innerHTML = inputsHtml;
+    }
